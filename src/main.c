@@ -23,6 +23,20 @@ int main(int argc, char const *argv[]){
     state *sta = state_new();
     state_populate_random(lvl,sta,40);
 
+
+    // Load textures
+    Texture2D personajes = LoadTexture("./assets/charactersheet.png");
+
+
+    // Animations variables
+
+    float frameWidth = (float)(personajes.width/6);
+    int maxFrames = (int)(personajes.width/(int)frameWidth);
+
+    float timer = 0.0f;
+    int frames= 0;
+
+
     // Main loop
     while(!WindowShouldClose()){
 
@@ -37,17 +51,38 @@ int main(int argc, char const *argv[]){
         float mouse_x = GetMouseX()-GetScreenWidth()/2;
         sta->aim_angle = atan2(-mouse_y,mouse_x);
 
+        // Check direction character is facing
+        float dir_x = 0;
+        float dir_y = 0;
+
+        dir_x += sta->button_state[0];
+        dir_x -= sta->button_state[2];
+        dir_y += sta->button_state[1];
+        dir_y -= sta->button_state[3];
+
+        Vector2 direccion = {dir_x,dir_y};
+
+
         // Update the state
         state_update(lvl,sta);
 
         // Drawing
         BeginDrawing();
 
-            ClearBackground(RAYWHITE);
+            ClearBackground(LIME);
 
-            draw_state(lvl, sta);
+            timer += GetFrameTime();
 
-            DrawText("Presente profe!",190,200,20,LIGHTGRAY);
+            if (timer >= 0.1f){
+              timer = 0.0f;
+              frames += 1;
+            }
+
+            frames = frames % maxFrames;
+
+            draw_state(lvl, sta, timer, direccion, frames, frameWidth, personajes);
+
+            DrawText("quirvi",190,200,20,PINK);
 
         EndDrawing();
 

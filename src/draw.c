@@ -15,7 +15,9 @@ void draw_level(const level *lvl){
     }
 }
 
-void draw_state(const level *lvl, const state *sta){
+void draw_state(const level *lvl, const state *sta, float tim, Vector2 direc, int frame, float framethicc, const Texture2D persona){
+
+
 
     // Initialize a camera to be used as drawing context
     Camera2D cam;
@@ -30,6 +32,14 @@ void draw_state(const level *lvl, const state *sta){
     // set the camera zoom to 1
     cam.zoom = 1.0;
 
+
+
+    //Variables to localize animations in the grid and define orientation
+    float altura1 = 0;
+    int invertir = 1;
+    Vector2 origen = {0,0};
+
+
     // Draw everything relative to the camera from now on
     BeginMode2D(cam);
 
@@ -42,11 +52,19 @@ void draw_state(const level *lvl, const state *sta){
         entity ent = sta->enemies[i].ent;
         // Initialize a Vector2 that represents the center of the entity position
         Vector2 vec = {ent.x,ent.y};
-        // Draw a circle with the radius of the entity, color depends on the enemy type
+        // Draw a circle with the radius of the entity, color depends on the enemy typed
         if(sta->enemies[i].kind == MINION){
-            DrawCircleV(vec,ent.rad,YELLOW);
+            //DrawCircleV(vec,ent.rad,YELLOW);
+            altura1  = 420;
+            Rectangle cuadroen1 = {framethicc*frame, altura1, framethicc*invertir, 70};
+            Rectangle escalaen1= {vec.x-ent.rad,vec.y-ent.rad,ent.rad*4,ent.rad*4};
+            DrawTexturePro(persona, cuadroen1, escalaen1, origen, 0, RAYWHITE);
         }else{
-            DrawCircleV(vec,ent.rad,RED);
+            //DrawCircleV(vec,ent.rad,RED);
+            altura1 = 490;
+            Rectangle cuadroen2 = {framethicc*frame, altura1, framethicc*invertir, 70};
+            Rectangle escalaen2 = {vec.x-ent.rad,vec.y-ent.rad,ent.rad*4,ent.rad*4};
+            DrawTexturePro(persona, cuadroen2, escalaen2, origen, 0, RAYWHITE);
         }
     }
 
@@ -56,18 +74,70 @@ void draw_state(const level *lvl, const state *sta){
         entity ent = sta->pla.ent;
         // Initialize a Vector2 that represents the center of the entity position
         Vector2 vec = {ent.x,ent.y};
-        // Draw a circle with the radius of the entity
-        DrawCircleV(vec,ent.rad,BLUE);
+        // Draw a circlae with the radius of the entity
+        //DrawCircleV(vec,ent.rad,BLUE);
+
+
+        //idle
+        if(direc.x==0 && direc.y==0){
+          altura1 = 350;
+        }
+        //norte
+        else if(direc.x==0 && direc.y>0){
+          altura1 = 0;
+        }
+        //noreste
+        else if(direc.x>0 && direc.y>0){
+          altura1 = 70;
+        }
+        //este
+        else if(direc.x>0 && direc.y==0){
+          altura1 = 140;
+        }
+        //sureste
+        else if(direc.x>0 && direc.y<0){
+          altura1 = 210;
+        }
+        //sur
+        else if(direc.x==0 && direc.y<0){
+          altura1 = 280;
+        }
+        //suroeste
+        else if(direc.x<0 && direc.y<0){
+          altura1 = 210;
+          invertir = -1;
+        }
+        //oeste
+        else if(direc.x<0 && direc.y==0){
+          altura1 = 140;
+          invertir = -1;
+        }
+        //noroeste
+        else if(direc.x<0 && direc.y>0){
+          altura1 = 70;
+          invertir = -1;
+        }
+
+
+        Rectangle cuadro = {framethicc*frame, altura1, framethicc*invertir, 70};
+        Rectangle escalaprot = {vec.x-ent.rad,vec.y-ent.rad,ent.rad*4,ent.rad*4};
+        DrawTexturePro(persona, cuadro, escalaprot, origen, 0, RAYWHITE);
+        //DrawTextureRec(persona, cuadro, vec, RAYWHITE);
+
     }
 
-    // Draw bullets
+    // Draw bulletsmak
     for(int i=0;i<sta->n_bullets;i++){
         // Get a copy of the bullet entity
         entity ent = sta->bullets[i].ent;
         // Initialize a Vector2 that represents the center of the entity position
         Vector2 vec = {ent.x,ent.y};
         // Draw a circle with the radius of the entity
-        DrawCircleV(vec,ent.rad,PINK);
+        //DrawCircleV(vec,ent.rad,PINK);
+        altura1 = 560;
+        Rectangle cuadroen2 = {framethicc*frame, altura1, framethicc*invertir, 70};
+        Rectangle escalaen2 = {vec.x-ent.rad,vec.y-ent.rad,ent.rad*3,ent.rad*3};
+        DrawTexturePro(persona, cuadroen2, escalaen2, origen, 0, RAYWHITE);
     }
 
     // Stop drawing relative to the camera
