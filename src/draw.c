@@ -34,10 +34,13 @@ void draw_state(const level *lvl, const state *sta, float tim, Vector2 direc, in
 
 
 
-    //Variables to localize animations in the grid and define orientation
+    //Variables to localize animations in the grid, define orientation and relative scale
     float altura1 = 0;
     int invertir = 1;
     Vector2 origen = {0,0};
+
+    //Changing this value increases or decreases the size of the sprites in relation to the entity's radius 
+    int escala = 4;
 
 
     // Draw everything relative to the camera from now on
@@ -52,18 +55,18 @@ void draw_state(const level *lvl, const state *sta, float tim, Vector2 direc, in
         entity ent = sta->enemies[i].ent;
         // Initialize a Vector2 that represents the center of the entity position
         Vector2 vec = {ent.x,ent.y};
-        // Draw a circle with the radius of the entity, color depends on the enemy typed
+        // Draw a circle with the radius of the entity, color depends on the enemy type
         if(sta->enemies[i].kind == MINION){
             //DrawCircleV(vec,ent.rad,YELLOW);
             altura1  = 420;
             Rectangle cuadroen1 = {framethicc*frame, altura1, framethicc*invertir, 70};
-            Rectangle escalaen1= {vec.x-ent.rad,vec.y-ent.rad,ent.rad*4,ent.rad*4};
+            Rectangle escalaen1= {vec.x-ent.rad,vec.y-ent.rad,ent.rad*escala,ent.rad*escala};
             DrawTexturePro(persona, cuadroen1, escalaen1, origen, 0, RAYWHITE);
         }else{
             //DrawCircleV(vec,ent.rad,RED);
             altura1 = 490;
             Rectangle cuadroen2 = {framethicc*frame, altura1, framethicc*invertir, 70};
-            Rectangle escalaen2 = {vec.x-ent.rad,vec.y-ent.rad,ent.rad*4,ent.rad*4};
+            Rectangle escalaen2 = {vec.x-ent.rad,vec.y-ent.rad,ent.rad*escala,ent.rad*escala};
             DrawTexturePro(persona, cuadroen2, escalaen2, origen, 0, RAYWHITE);
         }
     }
@@ -120,7 +123,7 @@ void draw_state(const level *lvl, const state *sta, float tim, Vector2 direc, in
 
 
         Rectangle cuadro = {framethicc*frame, altura1, framethicc*invertir, 70};
-        Rectangle escalaprot = {vec.x-ent.rad,vec.y-ent.rad,ent.rad*4,ent.rad*4};
+        Rectangle escalaprot = {vec.x-ent.rad,vec.y-ent.rad,ent.rad*escala,ent.rad*escala};
         DrawTexturePro(persona, cuadro, escalaprot, origen, 0, RAYWHITE);
         //DrawTextureRec(persona, cuadro, vec, RAYWHITE);
 
@@ -136,7 +139,7 @@ void draw_state(const level *lvl, const state *sta, float tim, Vector2 direc, in
         //DrawCircleV(vec,ent.rad,PINK);
         altura1 = 560;
         Rectangle cuadroen2 = {framethicc*frame, altura1, framethicc*invertir, 70};
-        Rectangle escalaen2 = {vec.x-ent.rad,vec.y-ent.rad,ent.rad*3,ent.rad*3};
+        Rectangle escalaen2 = {vec.x-ent.rad,vec.y-ent.rad,ent.rad*escala,ent.rad*escala};
         DrawTexturePro(persona, cuadroen2, escalaen2, origen, 0, RAYWHITE);
     }
 
